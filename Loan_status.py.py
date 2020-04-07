@@ -18,13 +18,12 @@ from sklearn.metrics import accuracy_score, classification_report, confusion_mat
 from sklearn.preprocessing import StandardScaler
 from sklearn.ensemble import RandomForestRegressor, RandomForestClassifier
 import seaborn as sns
-
+from sklearn.svm import SVC
 
 
 uploaded = files.upload()
 
 df = pd.read_csv(io.BytesIO(uploaded['Bank loan data.csv']))
-df
 
 df.head()
 
@@ -50,16 +49,6 @@ for i in data_col:
   data[i] = label_enc_X.fit_transform(data[i])
 
 
-
-#data.drop(['Property_Area'], axis=1, inplace=True)
-
-
-data
-
-
-
-
-
 X = data.iloc[:,:-1].values   # (	Gender,	Education,	Self_Employed,	ApplicantIncome,	Credit_History)
 
 y = data.iloc[:,-1].values   # Loan Status
@@ -73,7 +62,7 @@ sc = StandardScaler()
 X_train = sc.fit_transform(X_train)
 X_test = sc.transform(X_test)
 
-X_test
+
 
 
 
@@ -94,7 +83,7 @@ Y_TEST = np.array(y_test).reshape(1,-1)
 Y_TEST
 
 ''' SVM  '''
-from sklearn.svm import SVC
+
 
 X_TRAIN = np.array(X_train).reshape(1,-1)
 Y_TRAIN = np.array(y_train).reshape(-1,1)
@@ -109,6 +98,10 @@ print('Confusion Matrix\n {}\n\n'.format(confusion_matrix(Y_TEST,y_pred)))
 print('Classification Report \n {}\n\n'.format(classification_report(Y_TEST,y_pred)))
 print('SVC Accuracy - \t {}\n'.format(classifier.score(X_test, Y_TEST)))
 
+
+
+'''    For predicting the output '''
+
 classifier.predict(X_test)
 
 classifier.predict([[ 4.54299688e-01,  1.85024956e+00, -3.80160683e-01,
@@ -120,19 +113,3 @@ classifier.predict([[ 4.54299688e-01,  1.85024956e+00, -3.80160683e-01,
 
 
 
-''' Random Forest Classifier 
-X_TRAIN = np.array(X_train).reshape(1,-1)
-Y_TRAIN = np.array(y_train).reshape(-1,1)
-X_TEST = np.array(X_test).reshape(-1,1)
-Y_TEST = np.array(y_test).reshape(-1,1)
-
-classifier = RandomForestClassifier(n_estimators=100, criterion='gini',max_depth=2, random_state=3)
-classifier.fit(X_train, Y_TRAIN)
-y_pred = classifier.predict(X_test)
-
-print('Confusion Matrix\n {}\n\n'.format(confusion_matrix(Y_TEST,y_pred)))
-print('Classification Report \n {}\n\n'.format(classification_report(Y_TEST,y_pred)))
-
-print('Random Forest Accuracy - \t {}\n'.format(classifier.score(X_test, Y_TEST)))
-
-'''
